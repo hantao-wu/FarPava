@@ -347,7 +347,7 @@ Fun_Pred <- function(x, y, xnew,p = 1, ahead, ci = 0.95){
 #' @param xnew Evaluate locations of function. When this is same as 'x', the return value is same as vector auto regression.
 #' @param p Integer for the lag order (default is p=1)
 #' @param ahead An integer specifying the number of forecast steps
-#' @param ci The forecast confidence interval (default is 0.95)
+#' @param ci The forecast confidence interval (default is 0.95 )
 #'
 #' @return forecast value of the function for each step at evaluate locations
 #' @export

@@ -17,7 +17,7 @@ Fun_cdf_Pred(x, y, xnew, p = 1, ahead, ci = 0.95)
 
 \item{ahead}{An integer specifying the number of forecast steps}
 
-\item{ci}{The forecast confidence interval (default is 0.95)}
+\item{ci}{The forecast confidence interval (default is 0.95 )}
 }
 \value{
 forecast value of the function for each step at evaluate locations
