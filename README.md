@@ -1,4 +1,4 @@
-#Install the package in Rstudio console
+\section{Install the package in Rstudio console}
 
 install.packages("devtools")
 
