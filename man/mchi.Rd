@@ -11,7 +11,7 @@ mchi(x, y, xnew)
 
 \item{y}{Estimated Value of the function at each observed locations}
 
-\item{xnew}{Evaluate locations}
+\item{xnew}{An evaluate location}
 }
 \value{
 Estimated Value of the function at each evaluate locations
@@ -20,5 +20,5 @@ Estimated Value of the function at each evaluate locations
 Monotone Cubic Hermite Interpolation
 }
 \examples{
-mchi(c(1,2,3),c(0.6,0.7,0.77),c(4,5))
+mchi(c(1,2,3),c(0.6,0.7,0.77),1.2)
 }

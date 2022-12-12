@@ -35,6 +35,6 @@ The function returns 2 components:
 Generate Simulate Data Sets
 }
 \examples{
-Sim_data(t=40,locations=c(1,2,3),func_Test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0.02,change_speed=0.2)$data
-Sim_data(t=200,locations=c(1,2,3),func_Test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0,change_speed=0.235)$test
+Sim_data(t=40,locations=c(1,2,3),func_test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0.02,change_speed=0.2)$data
+Sim_data(t=200,locations=c(1,2,3),func_test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0,change_speed=0.235)$test
 }

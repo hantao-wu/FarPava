@@ -1,16 +1,13 @@
 Package: MonoFar
 Type: Package
 Title: Functional Autoregression for CDFs
-Version: 0.1.0
-Author: Hantao
-Maintainer: hw448@cornell.edu
-Description: This package implement the Function Autoregression Model for CDFs.
-        This function is depends on pacakge 'vars'.
+Version: 0.1.1
+Author: Hantao Wu
+Maintainer: Hantao Wu <hw448@cornell.edu>
+Description: This package implement the Function Autoregression Model for CDFs. This function is depends on pacakge 'vars'.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: vars, ggplot2
+Imports: vars, stats
+Depends: vars
 RoxygenNote: 7.2.3
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3

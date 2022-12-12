@@ -25,8 +25,3 @@ forecast value of the function for each step at evaluate locations
 \description{
 Monotone Functional Auto-Regression Predictions
 }
-\examples{
-x = c(-1,0,1)
-y = cbind(pnorm(x,0,0.05),pnorm(x,0,0.1),pnorm(x,0,0.15),pnorm(x,0,0.2))
-Fun_cdf_Pred(x, y, xnew = c(0.5), p=1, ahead=1, ci=0.95)
-}

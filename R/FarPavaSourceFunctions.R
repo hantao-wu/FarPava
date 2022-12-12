@@ -93,14 +93,17 @@ check_negative <- function(a_n){
 #' @param sigma_error The variance of measurement error, the default value is 0
 #' @param change_speed The speed of normal cdf rotates
 #'
+#' @importFrom stats pnorm
+#' @importFrom stats rnorm
+#'
 #' @return The function returns 2 components:
 #' "data" a data matrix contains the values of normal cdf at observed locations;
 #' "test" a data matrix contains the values of normal cdf at evaluate locations
 #' @export
 #'
 #' @examples
-#' Sim_data(t=40,locations=c(1,2,3),func_Test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0.02,change_speed=0.2)$data
-#' Sim_data(t=200,locations=c(1,2,3),func_Test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0,change_speed=0.235)$test
+#' Sim_data(t=40,locations=c(1,2,3),func_test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0.02,change_speed=0.2)$data
+#' Sim_data(t=200,locations=c(1,2,3),func_test_locations=c(4,5,6),sigma_noise=0.05,sigma_error=0,change_speed=0.235)$test
 Sim_data <- function(t=40, locations, func_test_locations, sigma_noise = 0.05, sigma_error=0, change_speed=0.235) {
 
   l = length(locations)
@@ -148,6 +151,7 @@ Sim_data <- function(t=40, locations, func_test_locations, sigma_noise = 0.05, s
 #' @param ci The forecast confidence interval (default is 0.95)
 #'
 #' @importFrom vars VAR
+#' @importFrom stats predict
 #'
 #' @return A list with 3 items: "forecast" forecast value of the function for each step at locations; "lower" lower confidence band; "upper" upper confidence band
 #' @export
@@ -157,7 +161,7 @@ Sim_data <- function(t=40, locations, func_test_locations, sigma_noise = 0.05, s
 #' Var_Pred(y_ram, p=1, ahead=5, ci=0.95)
 Var_Pred <- function(y, p = 1, ahead, ci = 0.95){
   Var_est <- vars::VAR(y, p)
-  forecast <- vars::predict(VAR_est, n.ahead = ahead, ci = ci)
+  forecast <- stats::predict(Var_est, n.ahead = ahead, ci = ci)
 
   forecast.sim <- sapply(forecast$fcst, `[`, 1)
   for(k in 2:ahead){
@@ -251,13 +255,13 @@ iso_reg <- function(a){
 #'
 #' @param x Observed locations on a function
 #' @param y Estimated Value of the function at each observed locations
-#' @param xnew Evaluate locations
+#' @param xnew An evaluate location
 #'
 #' @return Estimated Value of the function at each evaluate locations
 #' @export
 #'
 #' @examples
-#' mchi(c(1,2,3),c(0.6,0.7,0.77),c(4,5))
+#' mchi(c(1,2,3),c(0.6,0.7,0.77),1.2)
 mchi <- function(x,y,xnew){
   #Compute the linear slopes between successive points
   n <- length(y)
@@ -271,7 +275,7 @@ mchi <- function(x,y,xnew){
   m[n] <- delta[n-1]
   for (i in 2:(n-1)){
     m[i] = (delta[i-1]+delta[i])/2
-    if (delta[i]==0){
+    if (delta[i] == 0){
       m[i] <- 0
       m[i+1] <- 0
     }
@@ -321,15 +325,15 @@ mchi <- function(x,y,xnew){
 #'
 #' @return forecast value of the function for each step at evaluate locations
 #' @export
-#'
-#' @examples
-#' x = c(-1,0,1)
-#' y = cbind(pnorm(x,0,0.05),pnorm(x,0,0.1),pnorm(x,0,0.15),pnorm(x,0,0.2))
-#' Fun_Pred(x, y, xnew = c(0.5), p=1, ahead=1, ci=0.95)
 Fun_Pred <- function(x, y, xnew,p = 1, ahead, ci = 0.95){
   Dis_pred <- Var_Pred(y, p, ahead, ci)
   Var_Pred_Value <- Dis_pred$forecast
-  Fun_Pred_Value <- mchi(x, Pred_Value, xnew)
+  Fun_Pred_Value <- matrix(NA, nrow=ahead, ncol=length(xnew))
+  for (i in 1:ahead){
+    for (j in 1:length(xnew)){
+      Fun_Pred_Value[i,j] <- mchi(x, Var_Pred_Value[i,], xnew[j])
+    }
+  }
   return(Fun_Pred_Value)
 }
 
@@ -347,18 +351,16 @@ Fun_Pred <- function(x, y, xnew,p = 1, ahead, ci = 0.95){
 #'
 #' @return forecast value of the function for each step at evaluate locations
 #' @export
-#'
-#' @examples
-#' x = c(-1,0,1)
-#' y = cbind(pnorm(x,0,0.05),pnorm(x,0,0.1),pnorm(x,0,0.15),pnorm(x,0,0.2))
-#' Fun_cdf_Pred(x, y, xnew = c(0.5), p=1, ahead=1, ci=0.95)
 Fun_cdf_Pred <- function(x, y, xnew,p = 1, ahead, ci = 0.95){
   Dis_pred <- Var_Pred(y, p, ahead, ci)
   Var_Pred_Value <- Dis_pred$forecast
+  Fun_Pred_Value <- matrix(NA, nrow=ahead, ncol=length(xnew))
   for(i in 1:ahead){
     Var_Pred_Value[i,] <- iso_reg(tru_func(Var_Pred_Value[i,]))
+    for (j in 1:length(xnew)){
+      Fun_Pred_Value[i,j] <- mchi(x, Var_Pred_Value[i,], xnew[j])
+    }
   }
-  Fun_Pred_Value <- mchi(x, Pred_Value, xnew)
   return(Fun_Pred_Value)
 }
 
